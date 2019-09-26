@@ -1,0 +1,20 @@
+{
+  "name": "jobrecruitment",
+  "version": "1.0.0",
+  "description": "REST API for jobs.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Job",
+    "recruitment"
+  ],
+  "author": "Faisal Hussain",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.7.1"
+  }
+}
