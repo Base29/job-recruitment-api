@@ -1,5 +1,5 @@
 const Job = require('../models/job.model.js');
-
+const { calculateLimitAndOffset, paginate } = require('paginate-info');
 // Create and Save a new Job
 exports.create = (req, res) => {
     // Create a Jod
@@ -23,10 +23,24 @@ exports.create = (req, res) => {
 };
 
 // Retrieve and return all jobs from the database.
-exports.findAll = (req, res) => {
+exports.findAll = async (req, res) => {
+    const {
+        query: { currentPage, pageSize }
+    } = req;
+    const { offset } = calculateLimitAndOffset(currentPage, pageSize);
+
     Job.find()
         .then(jobs => {
-            res.send(jobs);
+            const count = jobs.length;
+            const limit = 1;
+            const totalPages = Math.ceil(count / limit);
+            const paginatedData = jobs.slice(offset, offset + limit);
+            const paginationInfo = paginate(currentPage, count, paginatedData);
+            Object.assign(paginationInfo, { totalPages: totalPages });
+            return res.status(200).json({
+                success: true,
+                data: { result: paginatedData, meta: paginationInfo }
+            });
         })
         .catch(err => {
             res.status(500).send({
@@ -74,7 +88,7 @@ exports.update = (req, res) => {
             title: req.body.title || 'Untitled Job',
             content: req.body.description
         },
-        {new: true}
+        { new: true }
     )
         .then(job => {
             if (!job) {
@@ -105,7 +119,7 @@ exports.delete = (req, res) => {
                     message: 'Job not found with id ' + req.params.jobId
                 });
             }
-            res.send({message: 'Job deleted successfully!'});
+            res.send({ message: 'Job deleted successfully!' });
         })
         .catch(err => {
             if (err.kind === 'ObjectId' || err.name === 'NotFound') {

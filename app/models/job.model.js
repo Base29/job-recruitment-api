@@ -1,15 +1,16 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate');
 
 const JobSchema = mongoose.Schema(
     {
-        title: {type: String, required: true},
-        description: {type: String, required: true},
-        creator: {type: String, required: true},
-        datecreated: {type: Date, required: true}
+        title: { type: String, required: true },
+        description: { type: String, required: true },
+        creator: { type: String, required: true },
+        datecreated: { type: Date, required: true }
     },
     {
         timestamps: true
     }
 );
-
+JobSchema.plugin(mongoosePaginate);
 module.exports = mongoose.model('Job', JobSchema);
