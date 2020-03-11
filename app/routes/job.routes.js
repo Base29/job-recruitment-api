@@ -5,7 +5,7 @@ module.exports = app => {
     app.post('/jobs', jobs.create);
 
     // Retrieve all Jobs
-    app.get('/jobs', jobs.findAll);
+    app.get('/jobs', jobs.getAll);
 
     // Retrieve a single Job with jobId
     app.get('/jobs/:jobId', jobs.findOne);

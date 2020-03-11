@@ -132,3 +132,6 @@ exports.delete = (req, res) => {
             });
         });
 };
+exports.getAll = (req, res) => {
+    Job.paginate().then(job => res.status(200).json(job));
+};
